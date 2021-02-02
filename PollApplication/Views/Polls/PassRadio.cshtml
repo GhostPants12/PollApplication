@@ -1,0 +1,23 @@
+﻿@model List<QuestionRadioViewModel>
+
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+<form asp-action="PassRadio" asp-controller="Polls">
+    <h3 align="center">@ViewBag.PollName (@Model.Count вопросов)</h3>
+    @for (int k = 0; k < Model.Count; k++)
+    {
+        <h4>@(k + 1). @Model[k].Question</h4>
+        <input type="hidden" value="@Model[k].Question" name="[@k].Question"/>
+        <input type="hidden" value="@Model[k].QuestionId" name="[@k].QuestionId"/>
+        <div class="form-group">
+            @for (int i = 0; i < Model[k].Variants.Count; i++)
+            {
+                <p>@Html.RadioButtonFor((model => model[@k].AnswerId), Model[@k].Variants[i].Id) @Html.DisplayFor((model => Model[k].Variants[i].Text))</p>
+                <input type="hidden" value="@Model[k].Variants[i].Text" name="[@k].Variants[@i].Text"/>
+                <input type="hidden" value="@Model[k].Variants[i].Id" name="[@k].Variants[@i].Id"/>
+            }
+        </div>
+    }
+    <div class="form-group">
+        <input type="submit" value="Далее" class="btn" style="background-color: lightgrey"/>
+    </div>
+</form>

@@ -1,0 +1,50 @@
+﻿@model PollApplication.Models.PollViewModel
+
+<h1>Опросы</h1>
+
+<form asp-action="Index" method="get">
+    <p>
+        Название: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Найти" />
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+    <tr align="center">
+        <th align="center">
+            Название
+        </th>
+        <th align="center">
+            Количество вопросов
+        </th>
+        <th align="center">
+            Дата
+        </th>
+        <th align="center"></th>
+        <th align="center"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Polls)
+    {
+        <tr align="center">
+            <td align="center">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td align="center">
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td align="center">
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+        <td align="center">
+            <a asp-action="Pass" asp-route-id="@item.Id">Пройти опрос</a>
+        </td>
+        <td align="center">
+            <a asp-action="Stat" asp-route-id="@item.Id">Статистика</a>
+        </td>
+        </tr>
+    }
+    </tbody>
+</table>

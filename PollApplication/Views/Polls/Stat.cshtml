@@ -1,0 +1,9 @@
+﻿@model List<StatViewModel>
+
+@foreach (var statView in Model)
+{
+    <h3 align="center">@statView.QuestionText</h3>
+    <p>
+        @{ Html.RenderPartial("QuestionPieChart", statView);}
+    </p>
+}

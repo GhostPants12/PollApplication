@@ -1,0 +1,77 @@
+﻿@model List<PollApplication.Models.QuestionModel>
+
+<h1>Вопросы</h1>
+
+@if (@ViewBag.IsIncorrect)
+{
+    <p>* Некорректные данные.</p>
+}
+<div id="Questions">
+    <form asp-action="Questions" asp-controller="PollCreation" method="post">
+        @for (int i = 0; i < @ViewBag.Count; i++)
+        {
+        <div class="form-group">
+            <input type="text" name="[@i].Text" placeholder="Вопрос" value="" />
+            <input type="hidden" value="@ViewBag.Type" name="[@i].Type" />
+            <input type="hidden" value="@ViewBag.Count" name="[@i].Count" />
+            <input type="hidden" value="@ViewBag.Name" name="[@i].Name" />
+            <div class="col" id="Variants">
+                <div id="variant(@i)-1">
+                    <input type="text" name="[@i].Variants[0]" placeholder="Вариант ответа" value="" />
+                </div>
+                <div id="variant(@i)-2">
+                    <input type="text" name="[@i].Variants[1]" placeholder="Вариант ответа" value="" />
+                </div>
+                <div class="col-5">
+                    <input type="button" value="Добавить вариант ответа" onclick="AddVariant(this, @i, 2)" />
+                    <input type="button" value="Убрать вариант ответа" onclick="RemoveVariant(this, 1)" />
+                </div>
+            </div>
+        </div>
+        }
+        <div class="form-group">
+            <input type="submit" value="Сохранить" class="btn" style="background-color:lightgrey"/>
+        </div>
+    </form>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        function AddVariant(button, count, variant) {
+            var divOne = $("<div />");
+            var divTwo = $("<div />");
+            var newButtonAdd = $("<input />").attr("type", "button").attr("value", "Добавить вариант ответа")
+                .attr("onclick", "AddVariant(this, " + count + ", " + (variant + 1) + ")");
+            var newButtonRemove = $("<input />").attr("type", "button").attr("value", "Убрать вариант ответа")
+                .attr("onclick", "RemoveVariant(this, " + count + ", " + (variant + 1) + ")");
+            var newVariant = $("<input />").attr("type", "text")
+                .attr("id", "variant(" + count + ")-" + (variant + 1))
+                .attr("name", "[" + count + "].Variants[" + variant + "]")
+                .attr("placeholder", "Вариант ответа");
+            divOne.append(newVariant);
+            if (variant < 11) {
+                divTwo.append(newButtonAdd);
+            }
+            divTwo.append(newButtonRemove);
+            $(button).parent().parent().append(divOne);
+            $(button).parent().parent().append(divTwo);
+            $(button).parent().remove();
+        }
+
+        function RemoveVariant(button, count, variant) {
+            if (variant > 2) {
+                var div = $("<div />");
+                var newButtonAdd = $("<input />").attr("type", "button").attr("value", "Добавить вариант ответа")
+                    .attr("onclick", "AddVariant(this, " + count + ", " + variant + ")");
+                var newButtonRemove = $("<input />").attr("type", "button").attr("value", "Убрать вариант ответа")
+                    .attr("onclick", "RemoveVariant(this, " + count + ", " + (variant - 1) + ")");
+                div.append(newButtonAdd);
+                div.append(newButtonRemove);
+                document.getElementById("variant(" + count + ")-" + variant).remove();
+                $(button).parent().parent().append(div);
+                $(button).parent().remove();
+            }
+        }
+    </script>
+}
